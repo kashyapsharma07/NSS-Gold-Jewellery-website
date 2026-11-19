@@ -7,7 +7,7 @@ import { buildWhatsAppLink } from "@/lib/whatsapp";
 
 const NAV_LINKS = [
   { href: "/collections", label: "Collections" },
-  { href: "/#heritage", label: "Heritage" },
+  { href: "/heritage", label: "Heritage" },
   { href: "/#craftsmanship", label: "Bespoke & Craft" },
   { href: "/#visit", label: "Visit Showroom" },
 ];

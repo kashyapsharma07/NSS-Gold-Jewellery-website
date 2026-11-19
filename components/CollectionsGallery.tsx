@@ -1,9 +1,49 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { CATEGORIES, JEWELLERY_CATALOG, JewelleryItem } from "@/data/catalog";
-import { siteConfig } from "@/config/site";
 import { buildWhatsAppLink } from "@/lib/whatsapp";
+
+function JewelleryCardImage({ item }: { item: JewelleryItem }) {
+  const [imageError, setImageError] = useState(false);
+
+  // If item has an image and it didn't fail to load, render the optimized Next.js Image
+  if (item.image && !imageError) {
+    return (
+      <div className="relative w-full aspect-square bg-pearl/40 overflow-hidden mb-6 border border-champagne/40">
+        <Image
+          src={item.image}
+          alt={item.name}
+          fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+          onError={() => setImageError(true)}
+        />
+        {/* Subtle Luxury Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-obsidian/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+      </div>
+    );
+  }
+
+  // Elegant Luxury Fallback Placeholder until the user uploads their photo
+  return (
+    <div className="relative w-full aspect-square bg-gradient-to-br from-pearl/40 via-ivory to-pearl/30 overflow-hidden mb-6 border border-champagne/50 flex flex-col items-center justify-center p-6 text-center group-hover:border-gold/60 transition-colors">
+      <div className="w-14 h-14 rounded-full border border-gold/40 flex items-center justify-center mb-3 bg-ivory/80 shadow-xs">
+        <span className="font-display text-lg text-gold font-light">✦</span>
+      </div>
+      <span className="text-[10px] uppercase tracking-[0.2em] text-olive font-medium">
+        {item.categoryLabel}
+      </span>
+      <span className="text-[11px] text-obsidian/60 italic font-serif mt-1">
+        Handcrafted Masterpiece
+      </span>
+      <span className="mt-4 text-[9px] uppercase tracking-widest text-olive/50 border-t border-champagne/40 pt-2">
+        Surat Karigari
+      </span>
+    </div>
+  );
+}
 
 export function CollectionsGallery() {
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
@@ -50,11 +90,14 @@ export function CollectionsGallery() {
         {filteredItems.map((item) => (
           <article
             key={item.id}
-            className="group flex flex-col justify-between border border-champagne/60 bg-pearl/20 p-8 transition-all duration-300 hover:border-gold hover:shadow-xl hover:shadow-gold/5"
+            className="group flex flex-col justify-between border border-champagne/60 bg-pearl/20 p-6 sm:p-7 transition-all duration-300 hover:border-gold hover:shadow-xl hover:shadow-gold/5"
           >
             <div>
+              {/* Image Frame with Fallback Placeholder */}
+              <JewelleryCardImage item={item} />
+
               {/* Top Tag & Purity Badge */}
-              <div className="flex items-center justify-between gap-3 mb-6">
+              <div className="flex items-center justify-between gap-3 mb-4">
                 <span className="text-[10px] uppercase tracking-[0.2em] font-medium text-gold border border-gold/40 px-2.5 py-1 bg-ivory">
                   {item.tag}
                 </span>
@@ -72,12 +115,12 @@ export function CollectionsGallery() {
               </p>
 
               {/* Description */}
-              <p className="text-sm text-obsidian/75 font-light leading-relaxed mb-6">
+              <p className="text-sm text-obsidian/75 font-light leading-relaxed mb-5">
                 {item.description}
               </p>
 
               {/* Craftsmanship Note */}
-              <div className="bg-ivory/70 border border-champagne/40 p-3 rounded-none mb-6">
+              <div className="bg-ivory/70 border border-champagne/40 p-3 mb-6">
                 <p className="text-[11px] text-olive leading-normal font-light">
                   ✦ {item.details}
                 </p>
